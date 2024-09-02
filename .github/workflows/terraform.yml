@@ -116,7 +116,7 @@ jobs:
     - name: Get External IP
       id: get_ip
       run: |
-        kubectl get svc <your-service-name> -o=jsonpath='{.status.loadBalancer.ingress[0].ip}'
+        kubectl get svc app -o=jsonpath='{.status.loadBalancer.ingress[0].ip}'
     
     - name: Test API
       run: |
