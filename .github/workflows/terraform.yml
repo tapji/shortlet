@@ -42,7 +42,7 @@
 #       with:
 #         cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
-name: 'Terraform'
+name: 'Terraform GKE Deployment'
 
 on:
   push:
@@ -96,3 +96,40 @@ jobs:
       run: terraform apply -auto-approve -input=false
       env: 
             GOOGLE_CREDENTIALS: ${{ secrets.GCP_TF_KEY }}
+  build:
+    name: Build and Push Docker Image
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Build Docker Image
+      run: docker build -t <your-docker-repo>:latest .
+
+    - name: Push Docker Image
+      run: docker push <your-docker-repo>:latest
+
+  deploy:
+    name: Deploy to GKE
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up kubectl
+      uses: azure/setup-kubectl@v1
+      with:
+        version: 'v1.18.0'
+
+    - name: Deploy to GKE
+      run: kubectl apply -f deployment.yaml
+
+  verify:
+    name: Verify Deployment
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Test API
+      run: curl http://<your-gke-ip>:5000/time
