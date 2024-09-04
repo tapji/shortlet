@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-app-deployment
+  labels:
+    app: app
+spec:
+  replicas: 3  # Number of desired replicas
+  selector:
+    matchLabels:
+      app: app
+  template:
+    metadata:
+      labels:
+        app: app
+    spec:
+      containers:
+      - name: my-app-container
+        image: gcr.io/${PROJECT_ID}/${IMAGE_NAME}:${IMAGE_TAG} 
+        ports:
+        - containerPort: 8080
+        env:
+        - name: ENVIRONMENT
+          value: "production"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-app-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: 
+  ports:
+    - protocol: TCP
+      port: 80 
+      targetPort: 8080 

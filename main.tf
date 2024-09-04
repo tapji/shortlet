@@ -56,35 +56,3 @@ resource "kubernetes_namespace" "app_namespace" {
     name = "app"
   }
 }
-
-resource "kubernetes_deployment" "app_deployment" {
-  metadata {
-    name      = "app"
-    namespace = kubernetes_namespace.app_namespace.metadata.name
-  }
-
-  spec {
-    replicas = 2
-
-    selector {
-      match_labels = {
-        app = "app"
-      }
-    }
-
-    template {
-      metadata {
-        labels = {
-          app = "app"
-        }
-      }
-
-      spec {
-        container {
-          image = "shortlet"
-          name  = "app"
-        }
-      }
-    }
-  }
-}
