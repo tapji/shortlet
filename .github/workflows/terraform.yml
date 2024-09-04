@@ -106,10 +106,18 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Set up kubectl
-      uses: azure/setup-kubectl@v1
+    - name: Set up Google Cloud SDK
+      uses: google-github-actions/setup-gcloud@v1
       with:
-        version: 'v1.18.0'
+        version: '366.0.0'
+      env:
+        GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GCP_TF_KEY }}
+
+    - name: Authenticate to Google Cloud
+      run: gcloud auth activate-service-account --key-file=$GOOGLE_APPLICATION_CREDENTIALS
+
+    - name: Configure kubectl
+      run: gcloud container clusters get-credentials gke-cluster --zone us-west2 --project data-engineering-405316
 
     - name: Deploy to GKE
       run: kubectl apply -f deployment.yaml
