@@ -12,7 +12,6 @@ jobs:
   terraform:
     name: 'Terraform'
     runs-on: ubuntu-latest
-    environment: production
     defaults:
       run:
         shell: bash
@@ -53,7 +52,7 @@ jobs:
     name: Build and Push Docker Image
     runs-on: ubuntu-latest
     env: 
-      IMAGE_NAME: shortlet
+      IMAGE_NAME: images
       PROJECT_ID: data-engineering-405316
 
     steps:
@@ -116,6 +115,16 @@ jobs:
     - name: Authenticate to Google Cloud
       run: gcloud auth activate-service-account --key-file=$GOOGLE_APPLICATION_CREDENTIALS
 
+    - name: Configure gcloud
+      run: |
+        gcloud config set project ${{ secrets.GCP_PROJECT_ID }}
+        gcloud config set compute/zone ${{ secrets.GCP_COMPUTE_ZONE }}
+
+    - name: Set up kubectl
+      uses: azure/setup-kubectl@v1
+      with:
+        version: 'v1.18.0'
+    
     - name: Configure kubectl
       run: gcloud container clusters get-credentials gke-cluster --zone us-west2 --project data-engineering-405316
 
