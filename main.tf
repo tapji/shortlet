@@ -4,11 +4,11 @@ provider "google" {
 }
 
 resource "google_compute_network" "vpc_network" {
-  name = "vpc-network"
+  name = "shortlet-vpc-network"
 }
 
 resource "google_compute_router" "nat_router" {
-  name    = "nat-router"
+  name    = "shortlet-nat-router"
   network = google_compute_network.vpc_network.name
 }
 
@@ -33,7 +33,7 @@ resource "google_project_iam_member" "cluster_service_account" {
 resource "google_container_cluster" "primary" {
   name     = "gke-cluster"
   location = "us-west2"
-
+  initial_node_count = 1
   node_config {
     machine_type = "e2-medium"
     oauth_scopes = ["https://www.googleapis.com/auth/cloud-platform"]
