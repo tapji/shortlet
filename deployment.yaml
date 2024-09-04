@@ -15,7 +15,7 @@ spec:
         app: app
     spec:
       containers:
-      - name: my-app-container
+      - name: images
         image: gcr.io/${PROJECT_ID}/${IMAGE_NAME}:${IMAGE_TAG} 
         ports:
         - containerPort: 8080
