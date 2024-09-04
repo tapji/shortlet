@@ -19,6 +19,11 @@ resource "google_compute_router_nat" "nat" {
   source_subnetwork_ip_ranges_to_nat = "ALL_SUBNETWORKS_ALL_IP_RANGES"
 }
 
+resource "google_service_account" "gke_service_account" {
+  account_id   = "gke-service-account"
+  display_name = "GKE Service Account"
+}
+
 resource "google_project_iam_member" "cluster_service_account" {
   project = "data-engineering-405316"
   role   = "roles/container.admin"
