@@ -99,15 +99,7 @@ jobs:
       uses: google-github-actions/setup-gcloud@v1
       env:
         GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GCP_TF_KEY }}
-
-    - name: Authenticate to Google Cloud
-      run: gcloud auth activate-service-account --key-file=${{ secrets.GCP_TF_KEY }}
-
-    - name: Configure gcloud
-      run: |
-        gcloud config set project ${{ secrets.GCP_PROJECT_ID }}
-        gcloud config set compute/zone ${{ secrets.GCP_COMPUTE_ZONE }}
-
+        
     - name: Set up kubectl
       uses: azure/setup-kubectl@v1
       with:
